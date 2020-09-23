@@ -74,10 +74,30 @@ app.use('/graphql', graphqlHTTP({
             return `The comment is: ${args.commentText}`;
         },
         addPokemon: args => {
-            return `ID: ${args.name.toLowercase()}-${args.type}`
+            return `ID: ${args.name.toLowerCase()}-${args.type.toLowerCase()}`
         }
     }
 }));
+
+/**
+ * Using graphiql
+ * Here are some sample queries and mutations:
+ * 
+ * mutation {
+ *   createComment(commentText: "hey there")
+ * }
+ * 
+ * query {
+ *   pokemon {
+ *     name
+ *     type
+ *   }
+ * }
+ * 
+ * mutation {
+ *   addPokemon(name: "Pikachu", type: "electric")
+ * }
+ */
 
 app.listen(3000, () => {
     console.log('Backend server listening on port 3000');
