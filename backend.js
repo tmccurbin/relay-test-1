@@ -15,6 +15,18 @@ const { graphqlHTTP } = require('express-graphql');
  */
 const { buildSchema } = require('graphql');
 
+// Allow Cross-Origin Requests
+// Adopted from https://www.youtube.com/watch?v=VdwH3RDRXNM at 22 minutes
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST,GET,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    if (req.method === 'OPTIONS') {
+        return res.sendStatus(200);
+    }
+    next();
+})
+
 // -------------------------------------------------------------------------------
 //                                    GRAPHQL
 // -------------------------------------------------------------------------------
