@@ -8,6 +8,7 @@ function App() {
   // https://www.youtube.com/watch?v=zJvB2hnsXr0
 
   // for useEffect we use an empty array as an argument to run on mount
+  // The fetch call gets cleaned up at 7:50
   useEffect(() => {
     fetch("http://playground.tyrell.me:3000/graphql?", {
       "headers": {
