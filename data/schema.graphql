@@ -1,0 +1,18 @@
+schema {
+    query: RootQuery
+    mutation: RootMutation
+}
+
+type Pokemon {
+    name: String!
+    type: String!
+}
+
+type RootQuery {
+    pokemon: Pokemon!
+}
+
+type RootMutation {
+    createComment(commentText: String): String
+    addPokemon(name: String!, type: String!): ID!
+}

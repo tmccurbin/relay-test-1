@@ -1,11 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+// import { useEffect, useState } from 'react';
 import './App.css';
 
-function App() {
-  const [data, dataSet] = useState(null);
+import Pokemon from './Pokemon';
 
-  // This shows how to use fetch with graphql
+function App() {
+
+  /* FETCH EXAMPLE
+
+  // This shows how to use graphql with fetch and relay
   // https://www.youtube.com/watch?v=zJvB2hnsXr0
+  const [data, dataSet] = useState(null);
 
   // for useEffect we use an empty array as an argument to run on mount
   // The fetch call gets cleaned up at 7:50
@@ -29,10 +34,12 @@ function App() {
     });
   },[]);
 
+  */
+
   return (
     <div className="App">
       <h1>Query</h1>
-      <div>{JSON.stringify(data)}</div>
+      <Pokemon />
     </div>
   );
 }
