@@ -66,6 +66,13 @@ const myFirstPokemon = {
     type: "fire"
 };
 
+// Testing subscriptions. Every 2 seconds, update the name of the pokemon
+let count = 0;
+setInterval(() => {
+    count += 1;
+    myFirstPokemon.name = count.toString();
+}, 2000);
+
 /**
  * Configure the GraphQL endpoint
  * Set graphiql to true in non-production environments
