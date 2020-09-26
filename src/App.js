@@ -15,7 +15,7 @@ function App() {
   // for useEffect we use an empty array as an argument to run on mount
   // The fetch call gets cleaned up at 7:50
   useEffect(() => {
-    fetch("http://playground.tyrell.me:3000/graphql?", {
+    fetch("http://playground.tyrell.me:3000/graphql", {
       "headers": {
         "accept": "application/json",
         "accept-language": "en-US,en;q=0.9",

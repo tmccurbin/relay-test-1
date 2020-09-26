@@ -1,5 +1,7 @@
 const express = require('express');
 const app = express();
+const { pubsub, schema:subscriptionSchema } = require('./subscription');
+const gql = require('graphql-tag');
 
 /**
 This is a GraphQL package that can be used as middleware
@@ -13,23 +15,7 @@ const { graphqlHTTP } = require('express-graphql');
  * Then we can use this parsed schema with express-graphql
  * @buildSchema takes a javascript template literal string which defines our schema and converts it into a GraphQL object
  */
-const { buildSchema } = require('graphql');
-
-// Allow Cross-Origin Requests
-// Adopted from https://www.youtube.com/watch?v=VdwH3RDRXNM at 22 minutes
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'POST,GET,OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    if (req.method === 'OPTIONS') {
-        return res.sendStatus(200);
-    }
-    next();
-})
-
-// -------------------------------------------------------------------------------
-//                                    GRAPHQL
-// -------------------------------------------------------------------------------
+const { buildSchema, execute, subscribe } = require('graphql');
 
 // We have to define two special keys: "query" and "mutation"
 // Queries are for fetching data.
@@ -44,13 +30,23 @@ const mySchemaString = `
     schema {
         query: RootQuery
         mutation: RootMutation
+        subscription: Subscription
+    }
+
+    type Query{
+        pokemon: Pokemon!
+        newPokemon: Pokemon!
+    }
+
+    type Subscription {
+        newPokemon: Pokemon!
     }
 
     type Pokemon {
         name: String!
         type: String!
     }
-    
+
     type RootQuery {
         pokemon: Pokemon!
     }
@@ -58,8 +54,43 @@ const mySchemaString = `
     type RootMutation {
         createComment(commentText: String): String
         addPokemon(name: String!, type: String!): ID!
-    }
+}
 `;
+
+// Websocket server
+const { createServer } = require('http');
+const { SubscriptionServer } = require('subscriptions-transport-ws');
+const WS_PORT = 4000;
+
+const ws = createServer((req, res) => {
+    res.writeHead(400);
+    res.end();
+})
+
+ws.listen(WS_PORT, () => {
+    console.log(`Websocket server listening on port ${WS_PORT}`);
+});
+
+const subscriptionServer = SubscriptionServer.create({
+    schema: subscriptionSchema,
+    execute,
+    subscribe,
+    onConnect: () => {
+        console.log('A websocket client has connected');
+    }
+}, {server: ws, path: '/graphql'});
+
+// Allow Cross-Origin Requests
+// Adopted from https://www.youtube.com/watch?v=VdwH3RDRXNM at 22 minutes
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST,GET,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    if (req.method === 'OPTIONS') {
+        return res.sendStatus(200);
+    }
+    next();
+});
 
 const myFirstPokemon = {
     name: "Charizard",
@@ -71,6 +102,8 @@ let count = 0;
 setInterval(() => {
     count += 1;
     myFirstPokemon.name = count.toString();
+    // Publish/trigger the event
+    pubsub.publish('newPokemon', {newPokemon: myFirstPokemon});
 }, 2000);
 
 /**
@@ -97,6 +130,14 @@ app.use('/graphql', graphqlHTTP({
         }
     }
 }));
+
+/*
+Old subscription resolver
+newPokemon: () => {
+    pubsub.asyncIterator('newPokemon')
+}
+*/
+
 
 /**
  * Using graphiql
