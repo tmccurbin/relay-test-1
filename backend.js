@@ -1,7 +1,6 @@
 const express = require('express');
 const app = express();
 const { pubsub, schema:subscriptionSchema } = require('./subscription');
-const gql = require('graphql-tag');
 
 /**
 This is a GraphQL package that can be used as middleware
