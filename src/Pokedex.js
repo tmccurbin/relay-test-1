@@ -9,8 +9,6 @@ import { QueryRenderer } from "react-relay";
 // -------------------
 
 function Pokedex() {
-    const [pokemon, setPokemon] = useState(null);
-
     const subscription = graphql`
     subscription PokedexSubscription {
       newPokemon {
@@ -30,16 +28,14 @@ function Pokedex() {
                 console.log(`running onCompleted event handler`);
             },
             onError: error => {
-                console.log('There was an error with the subscription. The error follows:')
+                console.log('There was an error with the subscription. The error follows:');
                 console.error(error);
-                console.log('That error has been logged')
             },
             onNext: response => {
-                console.log('onNext is running.');
+                console.log('onNext is running');
             },
             updater: (store, data) => {
-                console.log('updater is running. Updating state');
-
+                console.log('updater is running');
             }
         }
     );
