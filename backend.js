@@ -33,9 +33,8 @@ const mySchemaString = `
         subscription: Subscription
     }
 
-    type Query{
+    type Query {
         pokemon: Pokemon!
-        newPokemon: Pokemon!
     }
 
     type Subscription {
@@ -145,34 +144,6 @@ app.use('/graphql', graphqlHTTP({
         }
     }
 }));
-
-/*
-Old subscription resolver
-newPokemon: () => {
-    pubsub.asyncIterator('newPokemon')
-}
-*/
-
-
-/**
- * Using graphiql
- * Here are some sample queries and mutations:
- * 
- * mutation {
- *   createComment(commentText: "hey there")
- * }
- * 
- * query {
- *   pokemon {
- *     name
- *     type
- *   }
- * }
- * 
- * mutation {
- *   addPokemon(name: "Pikachu", type: "electric")
- * }
- */
 
 app.listen(3000, () => {
     console.log('Backend server listening on port 3000');
