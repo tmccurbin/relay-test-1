@@ -19,21 +19,6 @@ function NewPokemon(operation, variables) {
         console.log('We got some data')
         console.log(data)
     });
-
-    /*
-    return fetch('http://playground.tyrell.me:3000/graphql', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            query: operation.text,
-            variables,
-        }),
-    }).then(response => {
-        return response.json();
-    });
-    */
 }
 
 export default NewPokemon;
