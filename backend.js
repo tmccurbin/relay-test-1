@@ -97,14 +97,29 @@ const myFirstPokemon = {
     type: "fire"
 };
 
-// Testing subscriptions. Every 2 seconds, update the name of the pokemon
-let count = 0;
+// Testing subscriptions. Every 3 seconds, show another pokemon
+const pokedex = require('./Pokedex.json');
+let pokedexIndex = 0;
 setInterval(() => {
-    count += 1;
-    myFirstPokemon.name = count.toString();
-    // Publish/trigger the event
-    pubsub.publish('newPokemon', {newPokemon: myFirstPokemon});
-}, 2000);
+    // Format the pokemon object
+    const pokemon = {
+        name: pokedex[pokedexIndex].name,
+        type: `${pokedex[pokedexIndex].type_1}${pokedex[pokedexIndex].type_2 !== "-" ? ", " + pokedex[pokedexIndex].type_2 : ""}`
+    }
+
+    // Publish to client
+    console.log(pokemon);
+    pubsub.publish('newPokemon', {newPokemon: pokemon});
+
+
+    if (pokedex[pokedexIndex] === undefined) {
+        // Reset the index
+        pokedexIndex = 0;
+    } else {
+        // Incrememnt the index
+        pokedexIndex += 1;
+    }
+}, 3000)
 
 /**
  * Configure the GraphQL endpoint
