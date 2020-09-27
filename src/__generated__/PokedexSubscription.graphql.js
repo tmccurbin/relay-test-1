@@ -8,22 +8,22 @@
 
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
-export type PokemonComponentSubscriptionVariables = {||};
-export type PokemonComponentSubscriptionResponse = {|
+export type PokedexSubscriptionVariables = {||};
+export type PokedexSubscriptionResponse = {|
   +newPokemon: {|
     +name: string,
     +type: string,
   |}
 |};
-export type PokemonComponentSubscription = {|
-  variables: PokemonComponentSubscriptionVariables,
-  response: PokemonComponentSubscriptionResponse,
+export type PokedexSubscription = {|
+  variables: PokedexSubscriptionVariables,
+  response: PokedexSubscriptionResponse,
 |};
 */
 
 
 /*
-subscription PokemonComponentSubscription {
+subscription PokedexSubscription {
   newPokemon {
     name
     type
@@ -64,7 +64,7 @@ return {
     "argumentDefinitions": [],
     "kind": "Fragment",
     "metadata": null,
-    "name": "PokemonComponentSubscription",
+    "name": "PokedexSubscription",
     "selections": (v0/*: any*/),
     "type": "Subscription",
     "abstractKey": null
@@ -73,20 +73,20 @@ return {
   "operation": {
     "argumentDefinitions": [],
     "kind": "Operation",
-    "name": "PokemonComponentSubscription",
+    "name": "PokedexSubscription",
     "selections": (v0/*: any*/)
   },
   "params": {
-    "cacheID": "c08989376b7ea7c58f9fc902af1c07d0",
+    "cacheID": "39f5a2cb7e15a8e2a2f1d70a0f0ed40c",
     "id": null,
     "metadata": {},
-    "name": "PokemonComponentSubscription",
+    "name": "PokedexSubscription",
     "operationKind": "subscription",
-    "text": "subscription PokemonComponentSubscription {\n  newPokemon {\n    name\n    type\n  }\n}\n"
+    "text": "subscription PokedexSubscription {\n  newPokemon {\n    name\n    type\n  }\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '786ecb5d021c2813ab6d946c347d248b';
+(node/*: any*/).hash = 'b0b045402a72a40bb45e176161160e75';
 
 module.exports = node;

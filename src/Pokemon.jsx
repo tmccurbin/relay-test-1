@@ -1,11 +1,12 @@
 import React from "react";
-import { QueryRenderer, requestSubscription } from "react-relay";
+import { QueryRenderer } from "react-relay";
 import environment from "./lib/createRelayEnvironment";
-import subscriptionEnvironment from './lib/subscriptionEnvironment';
 import PokemonName from "./PokemonName";
 import PokemonType from "./PokemonType";
 import graphql from 'babel-plugin-relay/macro';
+import Pokedex from './Pokedex';
 
+/*
 // Instantiate the subscription query
 // I believe you can name the subscription whatever you want
 // So I named it PokemonComponentSubscription
@@ -53,7 +54,7 @@ requestSubscription(
       }
   }
 );
-
+*/
 
 // Below you can usually use one query renderer per page
 // and it represents the root of a query
@@ -76,6 +77,9 @@ export default function Pokemon() {
         } else if (props) {
           return (
               <div>
+                  <h1>Using Subscriptions</h1>
+                  <Pokedex />
+                  <h1>Using Queries</h1>
                   <PokemonName {...props} />
                   <PokemonType {...props} />
               </div>
