@@ -91,7 +91,7 @@ app.use((req, res, next) => {
     next();
 });
 
-const myFirstPokemon = {
+let pokemon = {
     name: "Charizard",
     type: "fire"
 };
@@ -101,7 +101,7 @@ const pokedex = require('./Pokedex.json');
 let pokedexIndex = 0;
 setInterval(() => {
     // Format the pokemon object
-    const pokemon = {
+    pokemon = {
         name: pokedex[pokedexIndex].name,
         type: `${pokedex[pokedexIndex].type_1}${pokedex[pokedexIndex].type_2 !== "-" ? ", " + pokedex[pokedexIndex].type_2 : ""}`
     }
@@ -111,7 +111,7 @@ setInterval(() => {
     pubsub.publish('newPokemon', {newPokemon: pokemon});
 
 
-    if (pokedex[pokedexIndex] === undefined) {
+    if (pokedex[pokedexIndex + 1] === undefined) {
         // Reset the index
         pokedexIndex = 0;
     } else {
@@ -134,7 +134,7 @@ app.use('/graphql', graphqlHTTP({
     schema: buildSchema(mySchemaString),
     rootValue: {
         pokemon: () => {
-            return myFirstPokemon;
+            return pokemon;
         },
         createComment: args => {
             return `The comment is: ${args.commentText}`;
