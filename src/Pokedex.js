@@ -1,67 +1,84 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { requestSubscription } from 'react-relay';
 import subscriptionEnvironment from './lib/subscriptionEnvironment';
 import graphql from 'babel-plugin-relay/macro';
 import { QueryRenderer } from "react-relay";
+import environment from "./lib/createRelayEnvironment";
+import { fetchQuery } from 'relay-runtime';
 
-// -------------------
-//    Example Code
-// -------------------
-
+// This is a functional component
 function Pokedex() {
-    const subscription = graphql`
-    subscription PokedexSubscription {
-      newPokemon {
-        name
-        type
-      }
-    }`;
+    // Initialize state
+    const [pokemon, setPokemon] = useState(null);
 
-    const variables = {};
-
-    requestSubscription(
-        subscriptionEnvironment,
-        {
-            subscription,
-            variables,
-            onCompleted: () => {
-                console.log(`running onCompleted event handler`);
-            },
-            onError: error => {
-                console.log('There was an error with the subscription. The error follows:');
-                console.error(error);
-            },
-            onNext: response => {
-                console.log('onNext is running');
-            },
-            updater: (store, data) => {
-                console.log('updater is running');
-            }
-        }
-    );
-
-    return (
-        <QueryRenderer
-            environment={subscriptionEnvironment}
-            query={subscription}
-            variables={{}}
-            render={({ error, props }) => {
-                if (error) {
-                    return <div>{error.message}</div>;
-                } else if (props) {
-                    console.log('props')
-                    console.log(props)
-                    return (
-                        <div>
-                            <h2>{props.newPokemon.name}</h2>
-                            Type: {props.newPokemon.type}
-                        </div>
-                    );
+    // Run this method only once (on mount)
+    useEffect(() => {
+        // Define a method to fetch initial data
+        async function fetchInitialData() {
+            console.log('Fetching initial data')
+            const query = graphql`
+            query PokedexQuery {
+                pokemon {
+                    name
+                    type
                 }
-                return <div>Loading</div>;
-            }}
-        />
-    );
+            }`;
+
+            // Make sure we retrieve the initial data before we subscribe to updates
+            await fetchQuery(environment, query, {})
+            .then(data => {
+                console.log('We got data from initial fetch')
+                console.log(data)
+
+                // Update state
+                setPokemon(data.pokemon);
+            })
+
+            // Return promise
+            return new Promise((resolve, reject) => {
+                resolve();
+            })
+        }
+        // Fetch initial data, THEN subscribe
+        fetchInitialData()
+        .then(() => {
+            console.log('Subscribing')
+            const subscription = graphql`
+            subscription PokedexSubscription {
+            newPokemon {
+                name
+                type
+            }
+            }`;
+
+            requestSubscription(
+                subscriptionEnvironment, // see Environment docs
+                {
+                    subscription,
+                    // optional but recommended:
+                    onCompleted: () => {/* server closed the subscription */},
+                    onError: error => console.error(error),
+                    onNext: (response => {}),
+                    updater: (store, data) => {
+                        console.log('Running the updater event handler');
+                        setPokemon(data.newPokemon);
+                    }
+                }
+            );
+        })
+    }, []);
+    
+    if (pokemon) {
+        console.log('pokemon is defined')
+        return (
+            <div>
+                <h2>{pokemon.name}</h2>
+                Type: {pokemon.type}
+            </div>
+        );
+    }
+    console.log('pokemon is not defined')
+    return (<div>Loading...</div>)
 }
 
 export default Pokedex;
