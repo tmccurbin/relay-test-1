@@ -23,7 +23,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "backend": "nodemon backend.js",
+    "backend": "nodemon --ignore './src/' backend.js",
     "relay": "relay-compiler --src ./src --schema ./data/schema.graphql --extensions js jsx"
   },
   "eslintConfig": {
