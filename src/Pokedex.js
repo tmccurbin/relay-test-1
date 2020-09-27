@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { requestSubscription } from 'react-relay';
 import subscriptionEnvironment from './lib/subscriptionEnvironment';
 import graphql from 'babel-plugin-relay/macro';
