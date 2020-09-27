@@ -38,7 +38,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Query</h1>
+      <h1>Pokemon Example</h1>
       <Pokemon />
     </div>
   );
