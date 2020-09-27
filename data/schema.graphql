@@ -4,9 +4,8 @@ schema {
     subscription: Subscription
 }
 
-type Query{
+type Query {
     pokemon: Pokemon!
-    newPokemon: Pokemon!
 }
 
 type Subscription {
